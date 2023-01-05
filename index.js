@@ -65,33 +65,116 @@ function prompt() {
 
 // Function to view all departments
 function viewDepartments() {
+    db.query('SELECT * FROM department;', (err, results) => {
+        if (err) throw err
+        console.table(results)
+        prompt();
+    });
+};
 
-    prompt();
-}
 // Function to view all roles
 function viewRoles() {
-
-    prompt();
-}
+    db.query('SELECT * FROM role;', (err, results) => {
+        if (err) throw err
+        console.table(results)
+        prompt();
+    });
+};
 // Function to view all employees
 function viewEmployees() {
-
-    prompt();
-}
+    db.query('SELECT * FROM employee;', (err, results) => {
+        if (err) throw err
+        console.table(results)
+        prompt();
+    });
+};
 // Function to add a department
 function addDept() {
-
-    prompt();
+    inquirer.prompt({
+        name: "dept_name",
+        type: "input",
+        message: "What is the name of the department?"
+    }).then(function (answer) {
+        db.query(`INSERT INTO department SET ?`, answer, (err, results) => {
+            if (err) throw err
+            console.log(`\n ${answer.dept_name} successfully added to departments!`)
+        })
+        prompt();
+    });
 }
 // Function to add a role
 function addRole() {
+    db.query('SELECT * FROM department;', (err, results) => {
+        if (err) throw err
+        console.table(results)
 
-    prompt();
-}
+        inquirer.prompt([
+            {
+                name: "title",
+                type: "input",
+                message: "What is the role's title?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the role's salary?"
+            },
+            {
+                name: "dept_name",
+                type: "list",
+                message: "What department is the role within?",
+                choices: () => results.map((result) => result.dept_name),
+            }
+
+        ])
+    })
+    // NEED TO PARSE RESULTS!
+    // .then(function (answer) {
+    //     answer.dept_name = results.filter((result) => result.dept_name === answer.dept_name)[0].id;
+    //     db.query(`INSERT INTO department SET ?`, answer, (err, results) => {
+    //         if (err) throw err
+    //         console.log(`\n ${answer.dept_name} successfully added to departments!`)
+    //     })
+    // prompt();
+    // });
+};
+// What is the employee's first name?
+// What is the employee's last name?
+// What is the employee's role?
+// Who is the employee's manager?
+
 // Function to add an employee
 function addEmployee() {
+    db.query('SELECT * FROM role;', (err, results) => {
+        if (err) throw err
+        console.table(results)
 
-    prompt();
+        inquirer.prompt([
+            {
+                name: "first_name",
+                type: "input",
+                mesage: "What is the employee's first name?"
+            },
+            {
+                name: "last",
+                type: "input",
+                mesage: "What is the employee's last name?"
+            },
+            {
+                name: "title",
+                type: "list",
+                message: "What is this employee's title?",
+                choices: () => results.map((result) => result.title),
+            },
+            {
+                name: "manager",
+                type: "boolean",
+                message: "Does this employee have a manager?"
+            }
+        ])
+    })
+    console.log(answer.manager)
+
 }
 // Function to update employee role
 function updateRole() {
