@@ -1,4 +1,6 @@
+-- USE THIS LINE WHEN TESTING ONLY. DELETE FOR PROFESSIONAL DEPLOYMENT!
 DROP DATABASE IF EXISTS employee_lerner_db;
+
 CREATE DATABASE employee_lerner_db;
 
 USE employee_lerner_db;
@@ -26,8 +28,8 @@ CREATE TABLE employee (
     role_id INT,   
     manager_id INT DEFAULT NULL,
     PRIMARY KEY (id),   
-    FOREIGN KEY (role_id)
-    REFERENCES role(id),
+    FOREIGN KEY (role_id) 
+    REFERENCES role(id) ON DELETE CASCADE,
     FOREIGN KEY (manager_id)
-    REFERENCES employee(id)
+    REFERENCES employee(id) ON DELETE SET NULL
 );
